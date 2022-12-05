@@ -38,10 +38,7 @@ class _PhoneNumberConfigureScreenState
         ),
         child: Wrap(children: [
           ic,
-          Text(
-            text,
-            textAlign: TextAlign.right,
-          ),
+          Text(text),
         ]));
   }
 
@@ -125,43 +122,6 @@ class _PhoneNumberConfigureScreenState
                     Expanded(
                       child: getcardservices(context),
                     )
-
-                    // Container(
-                    //   padding: const EdgeInsets.symmetric(
-                    //     horizontal: 10,
-                    //     vertical: 5,
-                    //   ),
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(10),
-                    //     color: Colors.grey[200],
-                    //   ),
-                    //   child: Text("Call Recording"),
-                    // ),
-                    // SizedBox(width: 5),
-                    // Container(
-                    //   padding: const EdgeInsets.symmetric(
-                    //     horizontal: 10,
-                    //     vertical: 5,
-                    //   ),
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(10),
-                    //     color: Colors.grey[200],
-                    //   ),
-                    //   child: Text("Call Recording"),
-                    // ),
-                    // SizedBox(width: 5),
-                    // Container(
-                    //   padding: const EdgeInsets.symmetric(
-                    //     horizontal: 10,
-                    //     vertical: 5,
-                    //   ),
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(10),
-                    //     color: Colors.grey[200],
-                    //   ),
-                    //   child: Text("Call Recording"),
-                    // ),
-                    // SizedBox(width: 5),
                   ],
                 )),
           ),
@@ -357,8 +317,8 @@ class _PhoneNumberConfigureScreenState
       verticalGridMargin: 20, // Vertical space around the grid
       minItemWidth:
           80, // The minimum item width (can be smaller, if the layout constraints are smaller)
-      minItemsPerRow: 1,
-      // The minimum items to show in a single row. Takes precedence over minItemWidth
+      minItemsPerRow:
+          1, // The minimum items to show in a single row. Takes precedence over minItemWidth
       maxItemsPerRow:
           10, // The maximum items to show in a single row. Can be useful on large screens
       listViewBuilderOptions: ListViewBuilderOptions(
@@ -383,50 +343,6 @@ class _PhoneNumberConfigureScreenState
         col(Color.fromARGB(255, 227, 44, 15)),
       ]), // The list of widgets in the list
     );
-    // return Container(
-    //   child: ListTile(
-    //     title: Padding(
-    //         padding: const EdgeInsets.only(bottom: 15.0),
-    //         child: Text(
-    //           "Color",
-    //           style: TextStyle(
-    //             fontWeight: FontWeight.bold,
-    //             color: Colors.white,
-    //           ),
-    //         )),
-    //     subtitle: Row(children: [
-    //       Flexible(
-    //           child: CircleAvatar(
-    //         backgroundColor: Colors.blue,
-    //       )),
-    //       SizedBox(width: 8),
-    //       Flexible(
-    //           child: CircleAvatar(
-    //         backgroundColor: Colors.white,
-    //       )),
-    //       SizedBox(width: 8),
-    //       Flexible(
-    //           child: CircleAvatar(
-    //         backgroundColor: Colors.green,
-    //       )),
-    //       SizedBox(width: 8),
-    //       Flexible(
-    //           child: CircleAvatar(
-    //         backgroundColor: Colors.red,
-    //       )),
-    //       SizedBox(width: 8),
-    //       Flexible(
-    //           child: CircleAvatar(
-    //         backgroundColor: Colors.orange,
-    //       )),
-    //       SizedBox(width: 8),
-    //       Flexible(
-    //           child: CircleAvatar(
-    //         backgroundColor: Colors.grey,
-    //       ))
-    //     ]),
-    //   ),
-    // );
   }
 
   Widget gc(BuildContext context) {
@@ -447,18 +363,6 @@ class _PhoneNumberConfigureScreenState
   }
 
   Widget getButton(BuildContext context) {
-    // return Container(
-    //     width: MediaQuery.of(context).size.width,
-    //     padding: const EdgeInsets.only(top: 15.0),
-    //     decoration: BoxDecoration(color: Colors.red),
-    //     child: Container(
-    //         child: Text(
-    //       "Tag",
-    //       style: TextStyle(
-    //         fontWeight: FontWeight.bold,
-    //         color: Colors.white,
-    //       ),
-    //     )));
     return Column(
       children: [
         TextButton(
@@ -497,49 +401,3 @@ class _PhoneNumberConfigureScreenState
     );
   }
 }
-
-// class MyHome extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: ListView.separated(
-//         itemCount: 4,
-//         separatorBuilder: (context, index) => const SizedBox(
-//           height: 1,
-//         ),
-//         itemBuilder: (context, index) {
-//           print(index);
-//           return Container(
-//             color: Colors.grey.withOpacity(0.3),
-//             height: 100 * (index + 1),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceAround,
-//               children: [
-//                 Card(
-//                   elevation: 5,
-//                   child: Text(
-//                     index.toString(),
-//                     style: const TextStyle(fontSize: 20),
-//                   ),
-//                 ),
-//                 Card(
-//                   elevation: 5,
-//                   child: Text(index.toString()),
-//                 ),
-//                 Card(
-//                   elevation: 5,
-//                   child: Text(index.toString()),
-//                 ),
-//               ],
-//             ),
-//           );
-//           // return ListTile(
-//           //   title: Text(index.toString()),
-//           //   tileColor: Colors.grey.withOpacity(0.3),
-//           // );
-//         },
-//       ),
-//     );
-//   }
-
-// }

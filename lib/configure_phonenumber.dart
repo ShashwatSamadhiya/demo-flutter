@@ -23,19 +23,26 @@ class PhoneNumberConfigureScreen extends StatefulWidget {
 class _PhoneNumberConfigureScreenState
     extends State<PhoneNumberConfigureScreen> {
   bool? isStillDefault;
+  String? isTag;
+  Color? isColor;
 
-  Widget cservice(String text) {
+  Widget cservice(String text, Icon ic) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 5,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.grey[200],
-      ),
-      child: Text(text),
-    );
+        padding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 5,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.grey[200],
+        ),
+        child: Wrap(children: [
+          ic,
+          Text(
+            text,
+            textAlign: TextAlign.right,
+          ),
+        ]));
   }
 
   Widget getcardservices(BuildContext context) {
@@ -43,9 +50,9 @@ class _PhoneNumberConfigureScreenState
       horizontalGridSpacing: 16, // Horizontal space between grid items
       verticalGridSpacing: 16, // Vertical space between grid items
       horizontalGridMargin: 20, // Horizontal space around the grid
-      verticalGridMargin: 20, // Vertical space around the grid
+      verticalGridMargin: 0, // Vertical space around the grid
       minItemWidth:
-          100, // The minimum item width (can be smaller, if the layout constraints are smaller)
+          140, // The minimum item width (can be smaller, if the layout constraints are smaller)
       minItemsPerRow: 1,
       // The minimum items to show in a single row. Takes precedence over minItemWidth
       maxItemsPerRow:
@@ -56,9 +63,17 @@ class _PhoneNumberConfigureScreenState
       ), // Options that are getting passed to the ListView.builder() function
       children: [
         //tags.map((t) => tag(t)).toList(),
-        cservice("Call recording"),
-        cservice("Incoming Call"),
-        cservice("Outgoing call"),
+        cservice("Call recording", Icon(Icons.fiber_manual_record)),
+        cservice(
+            "Incoming Call",
+            Icon(
+              Icons.phone_callback,
+            )),
+        cservice(
+            "Outgoing call",
+            Icon(
+              Icons.call_made,
+            )),
       ], // The list of widgets in the list
     );
   }
@@ -104,50 +119,51 @@ class _PhoneNumberConfigureScreenState
               ),
             ),
             subtitle: Container(
+                margin: EdgeInsets.only(top: 10, left: 0, right: 0, bottom: 0),
                 child: Row(
-              children: [
-                Expanded(
-                  child: getcardservices(context),
-                )
+                  children: [
+                    Expanded(
+                      child: getcardservices(context),
+                    )
 
-                // Container(
-                //   padding: const EdgeInsets.symmetric(
-                //     horizontal: 10,
-                //     vertical: 5,
-                //   ),
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(10),
-                //     color: Colors.grey[200],
-                //   ),
-                //   child: Text("Call Recording"),
-                // ),
-                // SizedBox(width: 5),
-                // Container(
-                //   padding: const EdgeInsets.symmetric(
-                //     horizontal: 10,
-                //     vertical: 5,
-                //   ),
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(10),
-                //     color: Colors.grey[200],
-                //   ),
-                //   child: Text("Call Recording"),
-                // ),
-                // SizedBox(width: 5),
-                // Container(
-                //   padding: const EdgeInsets.symmetric(
-                //     horizontal: 10,
-                //     vertical: 5,
-                //   ),
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(10),
-                //     color: Colors.grey[200],
-                //   ),
-                //   child: Text("Call Recording"),
-                // ),
-                // SizedBox(width: 5),
-              ],
-            )),
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(
+                    //     horizontal: 10,
+                    //     vertical: 5,
+                    //   ),
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(10),
+                    //     color: Colors.grey[200],
+                    //   ),
+                    //   child: Text("Call Recording"),
+                    // ),
+                    // SizedBox(width: 5),
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(
+                    //     horizontal: 10,
+                    //     vertical: 5,
+                    //   ),
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(10),
+                    //     color: Colors.grey[200],
+                    //   ),
+                    //   child: Text("Call Recording"),
+                    // ),
+                    // SizedBox(width: 5),
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(
+                    //     horizontal: 10,
+                    //     vertical: 5,
+                    //   ),
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(10),
+                    //     color: Colors.grey[200],
+                    //   ),
+                    //   child: Text("Call Recording"),
+                    // ),
+                    // SizedBox(width: 5),
+                  ],
+                )),
           ),
         ],
       ),
@@ -164,21 +180,35 @@ class _PhoneNumberConfigureScreenState
         borderRadius: BorderRadius.circular(10),
         color: Colors.grey[850],
       ),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ),
+      child: TextButton(
+          onPressed: () {
+            setState(() {
+              isColor = widget.tags[text];
+            });
+          },
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )),
     );
   }
 
   Widget col(Color clr) {
     return Container(
-        child: CircleAvatar(
-      backgroundColor: clr,
-    ));
+        margin: EdgeInsets.only(top: 10, left: 0, right: 0, bottom: 0),
+        child: TextButton(
+            onPressed: () {
+              setState(() {
+                isColor = clr;
+              });
+            },
+            child: CircleAvatar(
+              child: isColor == clr ? Icon(Icons.check_outlined) : null,
+              backgroundColor: clr,
+            )));
   }
 
   Widget getTags(BuildContext context) {
@@ -202,7 +232,8 @@ class _PhoneNumberConfigureScreenState
         tag("Personal"),
         tag("family"),
         tag("stranger"),
-        tag("Transaction and otp")
+        tag("Transaction and otp"),
+        tag("Add new+")
       ], // The list of widgets in the list
     );
     // return Container(
@@ -303,7 +334,7 @@ class _PhoneNumberConfigureScreenState
 
   Widget gt(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10, right: 20, bottom: 0),
+      margin: EdgeInsets.only(top: 10, right: 10, bottom: 0, left: 10),
       child: ListTile(
           title: Padding(
               padding: const EdgeInsets.only(bottom: 0),
@@ -325,16 +356,16 @@ class _PhoneNumberConfigureScreenState
       horizontalGridMargin: 20, // Horizontal space around the grid
       verticalGridMargin: 20, // Vertical space around the grid
       minItemWidth:
-          100, // The minimum item width (can be smaller, if the layout constraints are smaller)
+          80, // The minimum item width (can be smaller, if the layout constraints are smaller)
       minItemsPerRow: 1,
       // The minimum items to show in a single row. Takes precedence over minItemWidth
       maxItemsPerRow:
-          5, // The maximum items to show in a single row. Can be useful on large screens
+          10, // The maximum items to show in a single row. Can be useful on large screens
       listViewBuilderOptions: ListViewBuilderOptions(
         shrinkWrap: true,
         padding: EdgeInsets.zero,
       ), // Options that are getting passed to the ListView.builder() function
-      children: [
+      children: ([
         col(Color(0xffb74093)),
         col(Color(0xFFFFFFFF)),
         col(Color(0xFFFFFFFF)),
@@ -350,7 +381,7 @@ class _PhoneNumberConfigureScreenState
         col(Color.fromARGB(255, 54, 235, 244)),
         col(Color.fromARGB(255, 40, 16, 162)),
         col(Color.fromARGB(255, 227, 44, 15)),
-      ], // The list of widgets in the list
+      ]), // The list of widgets in the list
     );
     // return Container(
     //   child: ListTile(
@@ -449,6 +480,7 @@ class _PhoneNumberConfigureScreenState
   Widget build(BuildContext context) {
     print('i m building');
     isStillDefault = widget.isDefaultCallerId;
+
     return Scaffold(
       body: SingleChildScrollView(
           child: Container(

@@ -32,7 +32,46 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHome extends StatelessWidget {
-  Widget _getCard() {
+  Widget cservice(String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 5,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey[200],
+      ),
+      child: Text(text),
+    );
+  }
+
+  Widget getcardservices(BuildContext context) {
+    return ResponsiveGridList(
+      horizontalGridSpacing: 16, // Horizontal space between grid items
+      verticalGridSpacing: 16, // Vertical space between grid items
+      horizontalGridMargin: 20, // Horizontal space around the grid
+      verticalGridMargin: 20, // Vertical space around the grid
+      minItemWidth:
+          100, // The minimum item width (can be smaller, if the layout constraints are smaller)
+      minItemsPerRow: 1,
+      // The minimum items to show in a single row. Takes precedence over minItemWidth
+      maxItemsPerRow:
+          5, // The maximum items to show in a single row. Can be useful on large screens
+      listViewBuilderOptions: ListViewBuilderOptions(
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
+      ), // Options that are getting passed to the ListView.builder() function
+      children: [
+        //tags.map((t) => tag(t)).toList(),
+        cservice("Call recording"),
+        cservice("Incoming Call"),
+        cservice("Outgoing call"),
+      ], // The list of widgets in the list
+    );
+  }
+
+  Widget _getCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(bottom: 15.0),
       margin: EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 0),
@@ -72,46 +111,51 @@ class MyHome extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            subtitle: Row(
+            subtitle: Container(
+                child: Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.red,
-                  ),
-                  child: Text("Call Recording"),
-                ),
-                SizedBox(width: 5),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.red,
-                  ),
-                  child: Text("Call Recording"),
-                ),
-                SizedBox(width: 5),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.red,
-                  ),
-                  child: Text("Call Recording"),
-                ),
-                SizedBox(width: 5),
+                Expanded(
+                  child: getcardservices(context),
+                )
+
+                // Container(
+                //   padding: const EdgeInsets.symmetric(
+                //     horizontal: 10,
+                //     vertical: 5,
+                //   ),
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(10),
+                //     color: Colors.grey[200],
+                //   ),
+                //   child: Text("Call Recording"),
+                // ),
+                // SizedBox(width: 5),
+                // Container(
+                //   padding: const EdgeInsets.symmetric(
+                //     horizontal: 10,
+                //     vertical: 5,
+                //   ),
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(10),
+                //     color: Colors.grey[200],
+                //   ),
+                //   child: Text("Call Recording"),
+                // ),
+                // SizedBox(width: 5),
+                // Container(
+                //   padding: const EdgeInsets.symmetric(
+                //     horizontal: 10,
+                //     vertical: 5,
+                //   ),
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(10),
+                //     color: Colors.grey[200],
+                //   ),
+                //   child: Text("Call Recording"),
+                // ),
+                // SizedBox(width: 5),
               ],
-            ),
+            )),
           ),
         ],
       ),
@@ -121,16 +165,19 @@ class MyHome extends StatelessWidget {
   Widget tag(String text) {
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 5,
+        // horizontal: 5,
+        vertical: 10,
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.red,
+        color: Colors.grey[850],
       ),
       child: Text(
         text,
         textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.white,
+        ),
       ),
     );
   }
@@ -144,10 +191,10 @@ class MyHome extends StatelessWidget {
 
   Widget getTags(BuildContext context) {
     return ResponsiveGridList(
-      horizontalGridSpacing: 16, // Horizontal space between grid items
+      horizontalGridSpacing: 8, // Horizontal space between grid items
       verticalGridSpacing: 16, // Vertical space between grid items
-      horizontalGridMargin: 20, // Horizontal space around the grid
-      verticalGridMargin: 20, // Vertical space around the grid
+      horizontalGridMargin: 5, // Horizontal space around the grid
+      verticalGridMargin: 10, // Vertical space around the grid
       minItemWidth:
           100, // The minimum item width (can be smaller, if the layout constraints are smaller)
       minItemsPerRow: 1,
@@ -264,7 +311,7 @@ class MyHome extends StatelessWidget {
 
   Widget gt(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 0),
+      margin: EdgeInsets.only(top: 10, right: 20, bottom: 0),
       child: ListTile(
           title: Padding(
               padding: const EdgeInsets.only(bottom: 0),
@@ -406,7 +453,7 @@ class MyHome extends StatelessWidget {
         color: Colors.black,
         child: Column(
           children: [
-            _getCard(),
+            _getCard(context),
             gt(context),
             gc(context),
             //getButton(context),

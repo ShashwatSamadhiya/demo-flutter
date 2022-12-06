@@ -50,7 +50,7 @@ class _PhoneNumberConfigureScreenState
   Widget getcardservices(BuildContext context) {
     return ResponsiveGridList(
       horizontalGridSpacing: 16, // Horizontal space between grid items
-      verticalGridSpacing: 16, // Vertical space between grid items
+      verticalGridSpacing: 8, // Vertical space between grid items
       horizontalGridMargin: 20, // Horizontal space around the grid
       verticalGridMargin: 0, // Vertical space around the grid
       minItemWidth:
@@ -139,7 +139,7 @@ class _PhoneNumberConfigureScreenState
               trailing: Container(
                   margin: EdgeInsets.only(right: 10),
                   child: isTag == ".."
-                      ? null
+                      ? Text("")
                       : Text(
                           isTag[0],
                           style: TextStyle(
@@ -463,14 +463,81 @@ class _PhoneNumberConfigureScreenState
       ),
       body: SingleChildScrollView(
           child: Container(
-        constraints: BoxConstraints(minWidth: 100, maxWidth: 450),
+        // constraints: BoxConstraints(
+        // minWidth: 564,
+        // maxWidth: 564,
+        //),
         color: Colors.black,
         child: Column(
           children: [
             _getCard(context),
             gt(context),
             gc(context),
-            //getButton(context),
+            /* Container(
+                child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey,
+                  ),
+                  child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: const Text(
+                        "abcdefghijklmnopqrstuvwx",
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      )),
+                ),
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey,
+                  ),
+                  child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: const Text(
+                        "abcdefghijklmnopqrstuvwx",
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      )),
+                ),
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey,
+                  ),
+                  child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: const Text(
+                        "abcdefghijklmnopqrstuvwx",
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      )),
+                ),
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey,
+                  ),
+                  child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: const Text(
+                        "abcdefghijklmnopqrstuvwx",
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      )),
+                )
+              ],
+            ))*/
           ],
         ),
       )),

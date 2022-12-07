@@ -187,9 +187,10 @@ class _PhoneNumberConfigureScreenState
 
   Widget _nthChild(int index) {
     return Container(
+      margin: EdgeInsets.only(right: 9, top: 8),
       padding: const EdgeInsets.symmetric(
-        horizontal: 0,
-        vertical: 0,
+        horizontal: 5,
+        vertical: 2,
       ),
       child: TextButton(
           onPressed: () {
@@ -230,7 +231,7 @@ class _PhoneNumberConfigureScreenState
     int numCharactersConsumed = 0;
     int startIndex = 0;
     for (int i = 0; i < _tags.length; i++) {
-      if (numCharactersConsumed + _tags[i].length + 2 >=
+      if (numCharactersConsumed + _tags[i].length + 9 >=
           maxCharacterAtCurrentWidth) {
         children.add(Row(children: _children(startIndex, numItemsThatCanfit)));
         // print(maxCharacterAtCurrentWidth);
@@ -241,7 +242,7 @@ class _PhoneNumberConfigureScreenState
         numItemsThatCanfit = 1;
         startIndex = i;
       } else {
-        numCharactersConsumed += (_tags[i].length + 4);
+        numCharactersConsumed += (_tags[i].length + 9);
         numItemsThatCanfit += 1;
       }
     }
@@ -532,41 +533,42 @@ class _PhoneNumberConfigureScreenState
     isStillDefault = widget.isDefaultCallerId;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 40, 38, 38),
-        title: const Text('ASSIGN A TAG',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            )),
-        actions: [
-          TextButton(
-              onPressed: isTag == ".." ? () => {} : () => {print("hello")},
-              child: Text(
-                "Done",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: isTag == ".." ? Colors.grey[400] : Colors.white,
-                  fontWeight: isTag == ".." ? null : FontWeight.bold,
-                  fontSize: 16,
-                ),
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 40, 38, 38),
+          title: const Text('ASSIGN A TAG',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
               )),
-        ],
-      ),
-      body: SingleChildScrollView(
-          child: Container(
-        // constraints: BoxConstraints(
-        // minWidth: 564,
-        // maxWidth: 564,
-        //),
-        color: Colors.black,
-        child: Column(
-          children: [
-            _getCard(context),
-            gt(context),
-            gc(context),
-            /* Container(
+          actions: [
+            TextButton(
+                onPressed: isTag == ".." ? () => {} : () => {print("hello")},
+                child: Text(
+                  "Done",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: isTag == ".." ? Colors.grey[400] : Colors.white,
+                    fontWeight: isTag == ".." ? null : FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                )),
+          ],
+        ),
+        body: Container(
+          constraints:
+              BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+          color: Colors.black,
+          child: ListView.builder(
+            itemCount: 1,
+            itemBuilder: ((context, index) => Container(
+                  color: Colors.black,
+                  child: Column(
+                    children: [
+                      _getCard(context),
+                      gt(context),
+                      gc(context),
+                      /* Container(
                 child: Row(
               children: [
                 Container(
@@ -631,9 +633,10 @@ class _PhoneNumberConfigureScreenState
                 )
               ],
             ))*/
-          ],
-        ),
-      )),
-    );
+                    ],
+                  ),
+                )),
+          ),
+        ));
   }
 }

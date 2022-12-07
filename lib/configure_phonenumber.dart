@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 
-final List<String> _tags = <String>[
+final List<String> _tagsList = <String>[
   "Business & Work", // 15
   "Personal", // 8
   "Transactions & OTP", // 18
   "Family", // 6
   "Friends", // 7
   "Add new+",
+];
+
+final List<String> _serviceList = <String>[
+  "Call recording",
+  "Incoming Call",
+  "OutGoing Call"
 ];
 
 class PhoneNumberConfigureScreen extends StatefulWidget {
@@ -38,20 +44,25 @@ class _PhoneNumberConfigureScreenState
   final itemFontSize = 16.0;
   final itemSizeWeight = 2;
 
-  Widget cservice(String text, Icon ic) {
+  Widget cservice(int index, List<String> _tags) {
     return Container(
+        margin: EdgeInsets.only(top: 6, left: 4, right: 4),
         padding: const EdgeInsets.symmetric(
-          horizontal: 5,
-          vertical: 5,
+          horizontal: 6,
+          vertical: 6,
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Color.fromARGB(255, 246, 245, 246),
         ),
         child: Wrap(children: [
-          ic,
+          _tags[index] == "Call recording"
+              ? Icon(Icons.fiber_manual_record)
+              : _tags[index] == "Incoming Call"
+                  ? Icon(Icons.phone_callback)
+                  : Icon(Icons.call_made),
           Text(
-            text,
+            _tags[index],
             style: TextStyle(
               color: Colors.black,
             ),
@@ -59,38 +70,38 @@ class _PhoneNumberConfigureScreenState
         ]));
   }
 
-  Widget getcardservices(BuildContext context) {
-    return ResponsiveGridList(
-      horizontalGridSpacing: 16, // Horizontal space between grid items
-      verticalGridSpacing: 8, // Vertical space between grid items
-      horizontalGridMargin: 20, // Horizontal space around the grid
-      verticalGridMargin: 0, // Vertical space around the grid
-      minItemWidth:
-          140, // The minimum item width (can be smaller, if the layout constraints are smaller)
-      minItemsPerRow: 1,
-      // The minimum items to show in a single row. Takes precedence over minItemWidth
-      maxItemsPerRow:
-          5, // The maximum items to show in a single row. Can be useful on large screens
-      listViewBuilderOptions: ListViewBuilderOptions(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-      ), // Options that are getting passed to the ListView.builder() function
-      children: [
-        //tags.map((t) => tag(t)).toList(),
-        cservice("Call recording", Icon(Icons.fiber_manual_record)),
-        cservice(
-            "Incoming Call",
-            Icon(
-              Icons.phone_callback,
-            )),
-        cservice(
-            "Outgoing call",
-            Icon(
-              Icons.call_made,
-            )),
-      ], // The list of widgets in the list
-    );
-  }
+  // Widget getcardservices(BuildContext context) {
+  //   return ResponsiveGridList(
+  //     horizontalGridSpacing: 16, // Horizontal space between grid items
+  //     verticalGridSpacing: 8, // Vertical space between grid items
+  //     horizontalGridMargin: 20, // Horizontal space around the grid
+  //     verticalGridMargin: 0, // Vertical space around the grid
+  //     minItemWidth:
+  //         140, // The minimum item width (can be smaller, if the layout constraints are smaller)
+  //     minItemsPerRow: 1,
+  //     // The minimum items to show in a single row. Takes precedence over minItemWidth
+  //     maxItemsPerRow:
+  //         5, // The maximum items to show in a single row. Can be useful on large screens
+  //     listViewBuilderOptions: ListViewBuilderOptions(
+  //       shrinkWrap: true,
+  //       padding: EdgeInsets.zero,
+  //     ), // Options that are getting passed to the ListView.builder() function
+  //     children: [
+  //       //tags.map((t) => tag(t)).toList(),
+  //       cservice("Call recording", Icon(Icons.fiber_manual_record)),
+  //       cservice(
+  //           "Incoming Call",
+  //           Icon(
+  //             Icons.phone_callback,
+  //           )),
+  //       cservice(
+  //           "Outgoing call",
+  //           Icon(
+  //             Icons.call_made,
+  //           )),
+  //     ], // The list of widgets in the list
+  //   );
+  // }
 
   Widget _getCard(BuildContext context) {
     return Container(
@@ -175,7 +186,7 @@ class _PhoneNumberConfigureScreenState
                 child: Row(
                   children: [
                     Expanded(
-                      child: getcardservices(context),
+                      child: gridtags(context, _serviceList),
                     )
                   ],
                 )),
@@ -185,7 +196,7 @@ class _PhoneNumberConfigureScreenState
     );
   }
 
-  Widget _nthChild(int index) {
+  Widget _nthChild(int index, List<String> _tags) {
     return Container(
       margin: EdgeInsets.only(right: 9, top: 8),
       padding: const EdgeInsets.symmetric(
@@ -216,14 +227,16 @@ class _PhoneNumberConfigureScreenState
     );
   }
 
-  List<Widget> _children(int startIndex, int numItems) {
+  List<Widget> _children(int startIndex, int numItems, List<String> _tags) {
     return List.generate(numItems, (nth) {
       final index = startIndex + nth;
-      return _nthChild(index);
+      return _tags[0] == "Business & Work"
+          ? _nthChild(index, _tags)
+          : cservice(index, _tags);
     });
   }
 
-  List<Widget> _rows(int maxCharacterAtCurrentWidth) {
+  List<Widget> _rows(int maxCharacterAtCurrentWidth, List<String> _tags) {
     List<Widget> children = [];
     List<int> numItemsThatCanFitPerRow = [];
 
@@ -233,7 +246,8 @@ class _PhoneNumberConfigureScreenState
     for (int i = 0; i < _tags.length; i++) {
       if (numCharactersConsumed + _tags[i].length + 9 >=
           maxCharacterAtCurrentWidth) {
-        children.add(Row(children: _children(startIndex, numItemsThatCanfit)));
+        children.add(
+            Row(children: _children(startIndex, numItemsThatCanfit, _tags)));
         // print(maxCharacterAtCurrentWidth);
         // print(numItemsThatCanfit);
         // print(numCharactersConsumed);
@@ -246,11 +260,12 @@ class _PhoneNumberConfigureScreenState
         numItemsThatCanfit += 1;
       }
     }
-    children.add(Row(children: _children(startIndex, numItemsThatCanfit)));
+    children
+        .add(Row(children: _children(startIndex, numItemsThatCanfit, _tags)));
     return children;
   }
 
-  Widget gridtags(BuildContext context) {
+  Widget gridtags(BuildContext context, List<String> _tags) {
     return LayoutBuilder(
       builder: (context, dimens) {
         //print(dimens.maxWidth);
@@ -259,7 +274,7 @@ class _PhoneNumberConfigureScreenState
         //print(maxCharacterAtCurrentWidth);
 
         return Column(
-          children: _rows(maxCharacterAtCurrentWidth),
+          children: _rows(maxCharacterAtCurrentWidth, _tags),
         );
       },
     );
@@ -452,7 +467,7 @@ class _PhoneNumberConfigureScreenState
                   color: Colors.white,
                 ),
               )),
-          subtitle: Container(child: gridtags(context))),
+          subtitle: Container(child: gridtags(context, _tagsList))),
     );
   }
 

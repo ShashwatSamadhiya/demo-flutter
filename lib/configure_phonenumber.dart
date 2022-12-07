@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 
+final List<String> _tags = <String>[
+  "Business & Work", // 15
+  "Personal", // 8
+  "Transactions & OTP", // 18
+  "Family", // 6
+  "Friends", // 7
+  "Add new+",
+];
+
 class PhoneNumberConfigureScreen extends StatefulWidget {
   final String phoneNumber;
   final bool isDefaultCallerId;
@@ -25,6 +34,9 @@ class _PhoneNumberConfigureScreenState
   bool? isStillDefault;
   String isTag = "..";
   Color? isColor;
+
+  final itemFontSize = 16.0;
+  final itemSizeWeight = 2;
 
   Widget cservice(String text, Icon ic) {
     return Container(
@@ -173,7 +185,7 @@ class _PhoneNumberConfigureScreenState
     );
   }
 
-  Widget tag(String text) {
+  Widget _nthChild(int index) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 0,
@@ -182,24 +194,105 @@ class _PhoneNumberConfigureScreenState
       child: TextButton(
           onPressed: () {
             setState(() {
-              isTag = text;
-              isColor = widget.tags[text];
+              isTag = _tags[index];
+              isColor = widget.tags[_tags[index]];
             });
           },
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: isTag == text ? Colors.black : Colors.white,
-            ),
-          )),
+          child: FittedBox(
+              fit: BoxFit.cover,
+              child: Text(
+                _tags[index],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: isTag == _tags[index] ? Colors.black : Colors.white,
+                ),
+              ))),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
         border: Border.all(color: Colors.grey, width: 1),
-        color: isTag == text ? Colors.white : Colors.grey[850],
+        color: isTag == _tags[index] ? Colors.white : Colors.grey[850],
       ),
     );
   }
+
+  List<Widget> _children(int startIndex, int numItems) {
+    return List.generate(numItems, (nth) {
+      final index = startIndex + nth;
+      return _nthChild(index);
+    });
+  }
+
+  List<Widget> _rows(int maxCharacterAtCurrentWidth) {
+    List<Widget> children = [];
+    List<int> numItemsThatCanFitPerRow = [];
+
+    int numItemsThatCanfit = 0;
+    int numCharactersConsumed = 0;
+    int startIndex = 0;
+    for (int i = 0; i < _tags.length; i++) {
+      if (numCharactersConsumed + _tags[i].length + 2 >=
+          maxCharacterAtCurrentWidth) {
+        children.add(Row(children: _children(startIndex, numItemsThatCanfit)));
+        // print(maxCharacterAtCurrentWidth);
+        // print(numItemsThatCanfit);
+        // print(numCharactersConsumed);
+        // print(_tags[i].length);
+        numCharactersConsumed = _tags[i].length;
+        numItemsThatCanfit = 1;
+        startIndex = i;
+      } else {
+        numCharactersConsumed += (_tags[i].length + 4);
+        numItemsThatCanfit += 1;
+      }
+    }
+    children.add(Row(children: _children(startIndex, numItemsThatCanfit)));
+    return children;
+  }
+
+  Widget gridtags(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, dimens) {
+        //print(dimens.maxWidth);
+        final maxCharacterAtCurrentWidth =
+            (2 * (dimens.maxWidth / itemFontSize)).toInt();
+        //print(maxCharacterAtCurrentWidth);
+
+        return Column(
+          children: _rows(maxCharacterAtCurrentWidth),
+        );
+      },
+    );
+  }
+
+  // Widget tag(String text) {
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(
+  //       horizontal: 0,
+  //       vertical: 0,
+  //     ),
+  //     child: TextButton(
+  //         onPressed: () {
+  //           setState(() {
+  //             isTag = text;
+  //             isColor = widget.tags[text];
+  //           });
+  //         },
+  //         child: FittedBox(
+  //             fit: BoxFit.cover,
+  //             child: Text(
+  //               text,
+  //               textAlign: TextAlign.center,
+  //               style: TextStyle(
+  //                 color: isTag == text ? Colors.black : Colors.white,
+  //               ),
+  //             ))),
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(100),
+  //       border: Border.all(color: Colors.grey, width: 1),
+  //       color: isTag == text ? Colors.white : Colors.grey[850],
+  //     ),
+  //   );
+  // }
 
   Widget col(Color clr) {
     return Container(
@@ -223,127 +316,127 @@ class _PhoneNumberConfigureScreenState
             )));
   }
 
-  Widget getTags(BuildContext context) {
-    return ResponsiveGridList(
-      horizontalGridSpacing: 8, // Horizontal space between grid items
-      verticalGridSpacing: 16, // Vertical space between grid items
-      horizontalGridMargin: 5, // Horizontal space around the grid
-      verticalGridMargin: 10, // Vertical space around the grid
-      minItemWidth:
-          100, // The minimum item width (can be smaller, if the layout constraints are smaller)
-      minItemsPerRow: 1,
-      // The minimum items to show in a single row. Takes precedence over minItemWidth
-      maxItemsPerRow:
-          5, // The maximum items to show in a single row. Can be useful on large screens
-      listViewBuilderOptions: ListViewBuilderOptions(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-      ), // Options that are getting passed to the ListView.builder() function
-      children: [
-        //tags.map((t) => tag(t)).toList(),
-        tag("Bussiness & work"),
-        tag("Personal"),
-        tag("Family"),
-        tag("Stranger"),
-        tag("Transaction and otp"),
-        tag("Add new+")
-      ], // The list of widgets in the list
-    );
-    // return Container(
-    //   child: ListTile(
-    //       title: Padding(
-    //           padding: const EdgeInsets.only(bottom: 15.0),
-    //           child: Text(
-    //             "Tag",
-    //             style: TextStyle(
-    //               fontWeight: FontWeight.bold,
-    //               color: Colors.white,
-    //             ),
-    //           )),
-    //       subtitle: Flexible(
-    //         child: Row(children: [
-    //           Flexible(
-    //               flex: 24,
-    //               child: Container(
-    //                 padding: const EdgeInsets.symmetric(
-    //                   horizontal: 10,
-    //                   vertical: 5,
-    //                 ),
-    //                 decoration: BoxDecoration(
-    //                   borderRadius: BorderRadius.circular(10),
-    //                   color: Colors.red,
-    //                 ),
-    //                 child: Text("Bussiness & work"),
-    //               )),
-    //           SizedBox(width: 5),
-    //           Flexible(
-    //               flex: 12,
-    //               child: Container(
-    //                 padding: const EdgeInsets.symmetric(
-    //                   horizontal: 10,
-    //                   vertical: 5,
-    //                 ),
-    //                 decoration: BoxDecoration(
-    //                     borderRadius: BorderRadius.circular(10),
-    //                     color: Colors.red),
-    //                 child: Text("Personal"),
-    //               )),
-    //           SizedBox(width: 5),
-    //           Flexible(
-    //               flex: 12,
-    //               child: Container(
-    //                 padding: const EdgeInsets.symmetric(
-    //                   horizontal: 10,
-    //                   vertical: 5,
-    //                 ),
-    //                 decoration: BoxDecoration(
-    //                     borderRadius: BorderRadius.circular(10),
-    //                     color: Colors.red),
-    //                 child: Text("family"),
-    //               )),
-    //           SizedBox(width: 5),
-    //           Flexible(
-    //               flex: 12,
-    //               child: Container(
-    //                 padding: const EdgeInsets.symmetric(
-    //                   horizontal: 10,
-    //                   vertical: 5,
-    //                 ),
-    //                 decoration: BoxDecoration(
-    //                     borderRadius: BorderRadius.circular(10),
-    //                     color: Colors.red),
-    //                 child: Text("Stranger"),
-    //               )),
-    //           SizedBox(width: 5),
-    //           Flexible(
-    //               flex: 12,
-    //               child: Container(
-    //                 padding: const EdgeInsets.symmetric(
-    //                   horizontal: 10,
-    //                   vertical: 5,
-    //                 ),
-    //                 decoration: BoxDecoration(
-    //                     borderRadius: BorderRadius.circular(10),
-    //                     color: Colors.red),
-    //                 child: Text("Transaction and otp"),
-    //               )),
-    //           SizedBox(width: 5),
-    //           Flexible(
-    //               flex: 12,
-    //               child: Container(
-    //                 padding: const EdgeInsets.symmetric(
-    //                   horizontal: 10,
-    //                   vertical: 5,
-    //                 ),
-    //                 decoration: BoxDecoration(
-    //                     borderRadius: BorderRadius.circular(10),
-    //                     color: Colors.red),
-    //                 child: Text("+Add New"),
-    //               ))
-    //         ]),
-    //       )),
-    // );
-  }
+  // Widget getTags(BuildContext context) {
+  //   return ResponsiveGridList(
+  //     horizontalGridSpacing: 8, // Horizontal space between grid items
+  //     verticalGridSpacing: 16, // Vertical space between grid items
+  //     horizontalGridMargin: 5, // Horizontal space around the grid
+  //     verticalGridMargin: 10, // Vertical space around the grid
+  //     minItemWidth:
+  //         100, // The minimum item width (can be smaller, if the layout constraints are smaller)
+  //     minItemsPerRow: 1,
+  //     // The minimum items to show in a single row. Takes precedence over minItemWidth
+  //     maxItemsPerRow:
+  //         5, // The maximum items to show in a single row. Can be useful on large screens
+  //     listViewBuilderOptions: ListViewBuilderOptions(
+  //       shrinkWrap: true,
+  //       padding: EdgeInsets.zero,
+  //     ), // Options that are getting passed to the ListView.builder() function
+  //     children: [
+  //       //tags.map((t) => tag(t)).toList(),
+  //       tag("Bussiness & work"),
+  //       tag("Personal"),
+  //       tag("Family"),
+  //       tag("Stranger"),
+  //       tag("Transaction and otp"),
+  //       tag("Add new+")
+  //     ], // The list of widgets in the list
+  //   );
+  //   // return Container(
+  //   //   child: ListTile(
+  //   //       title: Padding(
+  //   //           padding: const EdgeInsets.only(bottom: 15.0),
+  //   //           child: Text(
+  //   //             "Tag",
+  //   //             style: TextStyle(
+  //   //               fontWeight: FontWeight.bold,
+  //   //               color: Colors.white,
+  //   //             ),
+  //   //           )),
+  //   //       subtitle: Flexible(
+  //   //         child: Row(children: [
+  //   //           Flexible(
+  //   //               flex: 24,
+  //   //               child: Container(
+  //   //                 padding: const EdgeInsets.symmetric(
+  //   //                   horizontal: 10,
+  //   //                   vertical: 5,
+  //   //                 ),
+  //   //                 decoration: BoxDecoration(
+  //   //                   borderRadius: BorderRadius.circular(10),
+  //   //                   color: Colors.red,
+  //   //                 ),
+  //   //                 child: Text("Bussiness & work"),
+  //   //               )),
+  //   //           SizedBox(width: 5),
+  //   //           Flexible(
+  //   //               flex: 12,
+  //   //               child: Container(
+  //   //                 padding: const EdgeInsets.symmetric(
+  //   //                   horizontal: 10,
+  //   //                   vertical: 5,
+  //   //                 ),
+  //   //                 decoration: BoxDecoration(
+  //   //                     borderRadius: BorderRadius.circular(10),
+  //   //                     color: Colors.red),
+  //   //                 child: Text("Personal"),
+  //   //               )),
+  //   //           SizedBox(width: 5),
+  //   //           Flexible(
+  //   //               flex: 12,
+  //   //               child: Container(
+  //   //                 padding: const EdgeInsets.symmetric(
+  //   //                   horizontal: 10,
+  //   //                   vertical: 5,
+  //   //                 ),
+  //   //                 decoration: BoxDecoration(
+  //   //                     borderRadius: BorderRadius.circular(10),
+  //   //                     color: Colors.red),
+  //   //                 child: Text("family"),
+  //   //               )),
+  //   //           SizedBox(width: 5),
+  //   //           Flexible(
+  //   //               flex: 12,
+  //   //               child: Container(
+  //   //                 padding: const EdgeInsets.symmetric(
+  //   //                   horizontal: 10,
+  //   //                   vertical: 5,
+  //   //                 ),
+  //   //                 decoration: BoxDecoration(
+  //   //                     borderRadius: BorderRadius.circular(10),
+  //   //                     color: Colors.red),
+  //   //                 child: Text("Stranger"),
+  //   //               )),
+  //   //           SizedBox(width: 5),
+  //   //           Flexible(
+  //   //               flex: 12,
+  //   //               child: Container(
+  //   //                 padding: const EdgeInsets.symmetric(
+  //   //                   horizontal: 10,
+  //   //                   vertical: 5,
+  //   //                 ),
+  //   //                 decoration: BoxDecoration(
+  //   //                     borderRadius: BorderRadius.circular(10),
+  //   //                     color: Colors.red),
+  //   //                 child: Text("Transaction and otp"),
+  //   //               )),
+  //   //           SizedBox(width: 5),
+  //   //           Flexible(
+  //   //               flex: 12,
+  //   //               child: Container(
+  //   //                 padding: const EdgeInsets.symmetric(
+  //   //                   horizontal: 10,
+  //   //                   vertical: 5,
+  //   //                 ),
+  //   //                 decoration: BoxDecoration(
+  //   //                     borderRadius: BorderRadius.circular(10),
+  //   //                     color: Colors.red),
+  //   //                 child: Text("+Add New"),
+  //   //               ))
+  //   //         ]),
+  //   //       )),
+  //   // );
+  // }
 
   Widget gt(BuildContext context) {
     return Container(
@@ -358,7 +451,7 @@ class _PhoneNumberConfigureScreenState
                   color: Colors.white,
                 ),
               )),
-          subtitle: Container(child: getTags(context))),
+          subtitle: Container(child: gridtags(context))),
     );
   }
 

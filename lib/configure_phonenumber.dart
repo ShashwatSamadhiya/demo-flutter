@@ -10,11 +10,15 @@ final List<String> _tagsList = <String>[
   "Add new+",
 ];
 
+bool textfieldindicator = false;
+
 final List<String> _serviceList = <String>[
   "Call recording",
   "Incoming Call",
   "OutGoing Call"
 ];
+
+List<Widget> childrens = [];
 
 class PhoneNumberConfigureScreen extends StatefulWidget {
   final String phoneNumber;
@@ -558,6 +562,10 @@ class _PhoneNumberConfigureScreenState
     MinColumnWidth:
     500;
     print(MediaQuery.of(context).size.width);
+    childrens.clear();
+    childrens.add(_getCard(context));
+    childrens.add(gt(context));
+    childrens.add(gc(context));
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 40, 38, 38),
@@ -582,24 +590,25 @@ class _PhoneNumberConfigureScreenState
           ],
         ),
         body: Container(
-          constraints: BoxConstraints(
-              maxHeight: (MediaQuery.of(context).size.height + 1000),
-              minWidth: 500),
-          color: Colors.black,
-          child: ListView.builder(
-            itemCount: 1,
-            itemBuilder: ((context, index) => Container(
-                  color: Colors.black,
-                  child: Column(
-                    children: [
-                      _getCard(context),
-                      gt(context),
-                      gc(context),
-                      SizedBox(height: 40),
-                    ],
-                  ),
-                )),
-          ),
-        ));
+            constraints: BoxConstraints(
+                maxHeight: (MediaQuery.of(context).size.height + 1000),
+                minWidth: 500),
+            color: Colors.black,
+            child: ListView(children: childrens)
+            // child: ListView.builder(
+            //   itemCount: 1,
+            //   itemBuilder: ((context, index) => Container(
+            //         color: Colors.black,
+            //         child: Column(
+            //           children: [
+            //             _getCard(context),
+            //             gt(context),
+            //             gc(context),
+            //             SizedBox(height: 40),
+            //           ],
+            //         ),
+            //       )),
+            // ),
+            ));
   }
 }

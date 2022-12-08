@@ -134,7 +134,7 @@ class _PhoneNumberConfigureScreenState
             color: Color.fromARGB(255, 246, 245, 246),
             child: ListTile(
               title: Text(
-                isTag,
+                isTag == ".." || isTag == "Add new+" ? ".." : isTag,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -161,7 +161,7 @@ class _PhoneNumberConfigureScreenState
                   )),
               trailing: Container(
                   margin: EdgeInsets.only(right: 10),
-                  child: isTag == ".."
+                  child: isTag == ".." || isTag == "Add new+"
                       ? Text("")
                       : Text(
                           isTag[0],
@@ -210,15 +210,24 @@ class _PhoneNumberConfigureScreenState
               isColor = widget.tags[_tags[index]];
             });
           },
-          child: FittedBox(
-              fit: BoxFit.cover,
-              child: Text(
-                _tags[index],
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: isTag == _tags[index] ? Colors.black : Colors.white,
-                ),
-              ))),
+          child: isTag == "Add new+" && _tags[index] == "Add new+"
+              ? Text(
+                  "_tags[index]",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: isTag == _tags[index] ? Colors.black : Colors.white,
+                  ),
+                )
+              : FittedBox(
+                  fit: BoxFit.cover,
+                  child: Text(
+                    _tags[index],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color:
+                          isTag == _tags[index] ? Colors.black : Colors.white,
+                    ),
+                  ))),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
         border: Border.all(color: Colors.grey, width: 1),
@@ -546,7 +555,9 @@ class _PhoneNumberConfigureScreenState
   Widget build(BuildContext context) {
     //print('i m building');
     isStillDefault = widget.isDefaultCallerId;
-
+    MinColumnWidth:
+    500;
+    print(MediaQuery.of(context).size.width);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 40, 38, 38),
@@ -571,8 +582,9 @@ class _PhoneNumberConfigureScreenState
           ],
         ),
         body: Container(
-          constraints:
-              BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+          constraints: BoxConstraints(
+              maxHeight: (MediaQuery.of(context).size.height + 1000),
+              minWidth: 500),
           color: Colors.black,
           child: ListView.builder(
             itemCount: 1,
@@ -583,71 +595,7 @@ class _PhoneNumberConfigureScreenState
                       _getCard(context),
                       gt(context),
                       gc(context),
-                      /* Container(
-                child: Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey,
-                  ),
-                  child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: const Text(
-                        "abcdefghijklmnopqrstuvwx",
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      )),
-                ),
-                Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey,
-                  ),
-                  child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: const Text(
-                        "abcdefghijklmnopqrstuvwx",
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      )),
-                ),
-                Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey,
-                  ),
-                  child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: const Text(
-                        "abcdefghijklmnopqrstuvwx",
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      )),
-                ),
-                Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey,
-                  ),
-                  child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: const Text(
-                        "abcdefghijklmnopqrstuvwx",
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      )),
-                )
-              ],
-            ))*/
+                      SizedBox(height: 40),
                     ],
                   ),
                 )),
